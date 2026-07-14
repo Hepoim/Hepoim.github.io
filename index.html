@@ -27,14 +27,8 @@
             padding: 36px 28px 32px;
             box-shadow: 0 20px 40px rgba(0,20,40,0.2);
         }
-        .auth-container .logo {
-            text-align: center;
-            margin-bottom: 8px;
-        }
-        .auth-container .logo svg {
-            width: 64px;
-            height: 64px;
-        }
+        .auth-container .logo { text-align: center; margin-bottom: 8px; }
+        .auth-container .logo svg { width: 64px; height: 64px; }
         .auth-container h1 {
             font-size: 26px;
             color: #1a2e3f;
@@ -75,10 +69,6 @@
             border-color: #3f7b9e;
             box-shadow: 0 0 0 3px rgba(63, 123, 158, 0.2);
         }
-        .input-group input:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
         .btn {
             border: none;
             border-radius: 60px;
@@ -90,43 +80,15 @@
             width: 100%;
             text-align: center;
         }
-        .btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none !important;
-        }
-        .btn-primary {
-            background: #1a3a4a;
-            color: white;
-        }
-        .btn-primary:active:not(:disabled) {
-            transform: scale(0.96);
-        }
-        .btn-outline {
-            background: transparent;
-            border: 2px solid #3f6a84;
-            color: #1d3f57;
-        }
-        .btn-success {
-            background: #27ae60;
-            color: white;
-        }
-        .btn-danger {
-            background: #c0392b;
-            color: white;
-        }
-        .btn-warning {
-            background: #e67e22;
-            color: white;
-        }
-        .flex-row {
-            display: flex;
-            gap: 12px;
-            margin-top: 8px;
-        }
-        .flex-row .btn {
-            flex: 1;
-        }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; }
+        .btn-primary { background: #1a3a4a; color: white; }
+        .btn-primary:active:not(:disabled) { transform: scale(0.96); }
+        .btn-outline { background: transparent; border: 2px solid #3f6a84; color: #1d3f57; }
+        .btn-success { background: #27ae60; color: white; }
+        .btn-danger { background: #c0392b; color: white; }
+        .btn-warning { background: #e67e22; color: white; }
+        .flex-row { display: flex; gap: 12px; margin-top: 8px; }
+        .flex-row .btn { flex: 1; }
         .msg-box {
             text-align: center;
             margin-top: 14px;
@@ -136,23 +98,10 @@
             min-height: 20px;
             transition: opacity 0.3s;
         }
-        .msg-error {
-            color: #c0392b;
-            background: #fde8e8;
-        }
-        .msg-success {
-            color: #27ae60;
-            background: #e8f8ed;
-        }
-        .hidden {
-            display: none !important;
-        }
-        .flex-between {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 12px;
-        }
+        .msg-error { color: #c0392b; background: #fde8e8; }
+        .msg-success { color: #27ae60; background: #e8f8ed; }
+        .hidden { display: none !important; }
+        .flex-between { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
         .balance-badge {
             background: #1a3a4a;
             color: white;
@@ -161,16 +110,8 @@
             font-size: 16px;
             font-weight: 600;
         }
-        .divider {
-            border: none;
-            border-top: 2px dashed #b7cdde;
-            margin: 18px 0;
-        }
-        .grid-2col {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-        }
+        .divider { border: none; border-top: 2px dashed #b7cdde; margin: 18px 0; }
+        .grid-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         .log-area {
             background: #edf4fa;
             border-radius: 20px;
@@ -181,16 +122,8 @@
             border: 1px solid #c8dbe9;
             margin-top: 8px;
         }
-        .log-entry {
-            padding: 6px 0;
-            border-bottom: 1px solid rgba(0,0,0,0.05);
-            color: #14303f;
-            font-size: 13px;
-            word-break: break-all;
-        }
-        .log-entry:last-child {
-            border-bottom: none;
-        }
+        .log-entry { padding: 6px 0; border-bottom: 1px solid rgba(0,0,0,0.05); color: #14303f; font-size: 13px; word-break: break-all; }
+        .log-entry:last-child { border-bottom: none; }
         .admin-panel {
             background: #dce6ef;
             border-radius: 28px;
@@ -204,21 +137,14 @@
             padding: 12px;
             margin-top: 10px;
         }
-        .admin-panel .admin-section:first-of-type {
-            margin-top: 0;
-        }
+        .admin-panel .admin-section:first-of-type { margin-top: 0; }
         .admin-panel .admin-section-title {
             font-size: 13px;
             font-weight: 600;
             color: #1a2e3f;
             margin-bottom: 8px;
         }
-        .small-note {
-            font-size: 12px;
-            opacity: 0.6;
-            margin-top: 12px;
-            text-align: center;
-        }
+        .small-note { font-size: 12px; opacity: 0.6; margin-top: 12px; text-align: center; }
         .bank-container {
             max-width: 500px;
             width: 100%;
@@ -227,27 +153,10 @@
             padding: 24px 20px 28px;
             box-shadow: 0 20px 40px rgba(0,20,40,0.2);
         }
-        .bank-container .logo {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .bank-container .logo svg {
-            width: 36px;
-            height: 36px;
-        }
-        .bank-container .logo h1 {
-            font-size: 20px;
-            margin: 0;
-            color: #1a2e3f;
-            font-weight: 700;
-            letter-spacing: 1px;
-        }
-        .btn-sm {
-            padding: 6px 16px;
-            width: auto;
-            font-size: 13px;
-        }
+        .bank-container .logo { display: flex; align-items: center; gap: 8px; }
+        .bank-container .logo svg { width: 36px; height: 36px; }
+        .bank-container .logo h1 { font-size: 20px; margin: 0; color: #1a2e3f; font-weight: 700; letter-spacing: 1px; }
+        .btn-sm { padding: 6px 16px; width: auto; font-size: 13px; }
         .user-list-item {
             display: flex;
             justify-content: space-between;
@@ -258,25 +167,8 @@
             margin-bottom: 4px;
             font-size: 14px;
         }
-        .user-list-item .user-name {
-            font-weight: 500;
-            color: #1a2e3f;
-        }
-        .user-list-item .user-balance {
-            color: #1d3f57;
-            font-weight: 600;
-        }
-        .loading-dots::after {
-            content: '';
-            animation: dots 1.2s steps(4, end) infinite;
-        }
-        @keyframes dots {
-            0% { content: ''; }
-            25% { content: '.'; }
-            50% { content: '..'; }
-            75% { content: '...'; }
-            100% { content: ''; }
-        }
+        .user-list-item .user-name { font-weight: 500; color: #1a2e3f; }
+        .user-list-item .user-balance { color: #1d3f57; font-weight: 600; }
         .spinner {
             display: inline-block;
             width: 16px;
@@ -288,9 +180,7 @@
             vertical-align: middle;
             margin-right: 6px;
         }
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
+        @keyframes spin { to { transform: rotate(360deg); } }
         @media (max-width: 480px) {
             .auth-container { padding: 24px 18px 28px; }
             .bank-container { padding: 18px 14px 22px; }
@@ -416,9 +306,7 @@
         <div id="adminContent" style="display:none; margin-top:10px;">
             <div class="admin-section">
                 <div class="admin-section-title">👥 所有用户及余额</div>
-                <div id="userListContainer">
-                    <div style="font-size:13px; color:#6a7f8f;">加载中...</div>
-                </div>
+                <div id="userListContainer"><div style="font-size:13px; color:#6a7f8f;">加载中...</div></div>
                 <button class="btn btn-sm" id="adminRefreshUsersBtn" style="margin-top:6px; width:auto;">🔄 刷新用户列表</button>
             </div>
 
@@ -434,7 +322,7 @@
             </div>
 
             <div class="admin-section">
-                <div class="admin-section-title">💸 管理员转账（加钱 · 无限资产）</div>
+                <div class="admin-section-title">💸 管理员转账（加钱）</div>
                 <div class="grid-2col">
                     <div class="input-group" style="margin:0;">
                         <label style="font-size:12px;">目标用户</label>
@@ -466,7 +354,7 @@
             </div>
 
             <div class="admin-section" style="border-left:3px solid #c0392b;">
-                <div class="admin-section-title" style="color:#c0392b;">🗑️ 删除用户（危险操作）</div>
+                <div class="admin-section-title" style="color:#c0392b;">🗑️ 删除用户</div>
                 <div class="flex-row" style="margin-top:4px;">
                     <div class="input-group" style="flex:2; margin:0;">
                         <input type="text" id="adminDeleteUser" placeholder="输入要删除的用户名">
@@ -495,18 +383,22 @@
     let isLoading = false;
 
     // ============================================================
-    //  工具函数
+    //  DOM 引用
     // ============================================================
-    function setLoading(btnId, loading) {
-        const btn = document.getElementById(btnId);
+    const $ = id => document.getElementById(id);
+
+    // ============================================================
+    //  UI 工具函数
+    // ============================================================
+    function setLoading(btnId, loading, text) {
+        const btn = $(btnId);
         if (!btn) return;
         if (loading) {
             btn.disabled = true;
-            btn.innerHTML = '<span class="spinner"></span> 处理中...';
+            btn.innerHTML = '<span class="spinner"></span> ' + (text || '处理中...');
         } else {
             btn.disabled = false;
-            // 恢复按钮文本（需要根据按钮不同设置不同文本）
-            const textMap = {
+            const map = {
                 'authLoginBtn': '🔓 登录',
                 'authRegisterBtn': '📝 注册',
                 'transferBtn': '💸 转账',
@@ -515,33 +407,28 @@
                 'adminDeleteUserBtn': '🗑️ 删除',
                 'adminViewLogBtn': '查看'
             };
-            btn.textContent = textMap[btnId] || '按钮';
+            btn.textContent = map[btnId] || '按钮';
         }
     }
 
     function showMsg(elId, text, isError = true) {
-        const el = document.getElementById(elId);
+        const el = $(elId);
         if (!el) return;
         el.textContent = text;
         el.className = 'msg-box ' + (isError ? 'msg-error' : 'msg-success');
-        // 3秒后自动淡出
-        clearTimeout(el._timer);
         if (text && !isError) {
+            clearTimeout(el._timer);
             el._timer = setTimeout(() => {
                 el.style.opacity = '0';
-                setTimeout(() => {
-                    el.textContent = '';
-                    el.className = 'msg-box';
-                    el.style.opacity = '1';
-                }, 300);
+                setTimeout(() => { el.textContent = ''; el.className = 'msg-box'; el.style.opacity = '1'; }, 300);
             }, 4000);
         }
     }
 
     // ============================================================
-    //  Supabase 请求（带超时）
+    //  Supabase 请求（核心修复）
     // ============================================================
-    async function supabaseRequest(method, table, body, query, timeout = 15000) {
+    async function supabaseRequest(method, table, body, query) {
         let url = SUPABASE_URL + '/rest/v1/' + table;
         if (query) {
             const params = new URLSearchParams();
@@ -550,44 +437,38 @@
                     params.append(key, query[key]);
                 }
             }
-            url += '?' + params.toString();
+            const qs = params.toString();
+            if (qs) url += '?' + qs;
         }
 
         const headers = {
             'apikey': SUPABASE_KEY,
             'Authorization': 'Bearer ' + SUPABASE_KEY,
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Prefer': 'return=representation'  // 关键修复：让 POST/PATCH 返回数据
         };
-        const options = {
-            method: method,
-            headers: headers
-        };
-        if (body) {
-            options.body = JSON.stringify(body);
+
+        const options = { method, headers };
+        if (body) options.body = JSON.stringify(body);
+
+        const response = await fetch(url, options);
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(errorText || 'HTTP ' + response.status);
         }
 
-        // 超时控制
-        const controller = new AbortController();
-        options.signal = controller.signal;
-        const timer = setTimeout(() => controller.abort(), timeout);
+        // 检查 Content-Length，如果为空则返回空数组
+        const contentLength = response.headers.get('content-length');
+        if (contentLength === '0' || response.status === 204) {
+            return [];
+        }
 
         try {
-            const response = await fetch(url, options);
-            clearTimeout(timer);
-            if (!response.ok) {
-                const errorText = await response.text();
-                throw new Error(errorText || '请求失败 (HTTP ' + response.status + ')');
-            }
-            if (method === 'DELETE') {
-                return { success: true };
-            }
             return await response.json();
         } catch(e) {
-            clearTimeout(timer);
-            if (e.name === 'AbortError') {
-                throw new Error('请求超时，请检查网络后重试');
-            }
-            throw e;
+            // 如果 JSON 解析失败，返回空数组
+            console.warn('JSON 解析失败，返回空数组', e);
+            return [];
         }
     }
 
@@ -606,9 +487,8 @@
     }
 
     async function createUser(username, password) {
-        const body = { username, password, balance: 100 };
-        await supabaseRequest('POST', 'users', body);
-        await supabaseRequest('POST', 'transactions', null, null, {
+        await supabaseRequest('POST', 'users', { username, password, balance: 100 });
+        await supabaseRequest('POST', 'transactions', {
             username: username,
             type: '开户',
             amount: 100,
@@ -632,7 +512,7 @@
     }
 
     async function addTransaction(username, type, amount, target) {
-        await supabaseRequest('POST', 'transactions', null, null, {
+        await supabaseRequest('POST', 'transactions', {
             username: username,
             type: type,
             amount: typeof amount === 'number' ? amount : parseFloat(amount) || 0,
@@ -641,22 +521,28 @@
         });
     }
 
+    async function updateBalance(username, newBalance) {
+        await supabaseRequest('PATCH', 'users', { balance: newBalance }, { username: 'eq.' + username });
+    }
+
     // ---- 转账 ----
     async function userTransfer(from, to, amount) {
         amount = parseFloat(amount);
         if (isNaN(amount) || amount <= 0) return { success: false, msg: '⚠️ 金额必须大于0' };
-        if (!(await userExists(to))) return { success: false, msg: '⚠️ 目标用户不存在' };
         if (from === to) return { success: false, msg: '⚠️ 不能转给自己' };
+
         const fromUser = await getUser(from);
         if (!fromUser) return { success: false, msg: '⚠️ 账户异常' };
         if (fromUser.balance < amount) return { success: false, msg: '⚠️ 余额不足' };
 
-        const newFromBalance = Math.round((fromUser.balance - amount) * 100) / 100;
-        await supabaseRequest('PATCH', 'users', { balance: newFromBalance }, { username: 'eq.' + from });
-
         const toUser = await getUser(to);
+        if (!toUser) return { success: false, msg: '⚠️ 目标用户不存在' };
+
+        const newFromBalance = Math.round((fromUser.balance - amount) * 100) / 100;
         const newToBalance = Math.round((toUser.balance + amount) * 100) / 100;
-        await supabaseRequest('PATCH', 'users', { balance: newToBalance }, { username: 'eq.' + to });
+
+        await updateBalance(from, newFromBalance);
+        await updateBalance(to, newToBalance);
 
         await addTransaction(from, '转账支出', amount, to);
         await addTransaction(to, '转账收入', amount, from);
@@ -668,10 +554,10 @@
     async function adminTransfer(toUsername, amount) {
         amount = parseFloat(amount);
         if (isNaN(amount) || amount <= 0) return { success: false, msg: '⚠️ 金额必须大于0' };
-        if (!(await userExists(toUsername))) return { success: false, msg: '⚠️ 目标用户不存在' };
         const targetUser = await getUser(toUsername);
+        if (!targetUser) return { success: false, msg: '⚠️ 目标用户不存在' };
         const newBalance = Math.round(((targetUser.balance || 0) + amount) * 100) / 100;
-        await supabaseRequest('PATCH', 'users', { balance: newBalance }, { username: 'eq.' + toUsername });
+        await updateBalance(toUsername, newBalance);
         await addTransaction(toUsername, '管理员加钱', amount, '管理员');
         return { success: true, msg: '✅ 成功给 ' + toUsername + ' 加钱 ' + amount.toFixed(2) };
     }
@@ -680,13 +566,13 @@
     async function adminDeduct(fromUsername, amount) {
         amount = parseFloat(amount);
         if (isNaN(amount) || amount <= 0) return { success: false, msg: '⚠️ 扣减金额必须大于0' };
-        if (!(await userExists(fromUsername))) return { success: false, msg: '⚠️ 目标用户不存在' };
         const targetUser = await getUser(fromUsername);
+        if (!targetUser) return { success: false, msg: '⚠️ 目标用户不存在' };
         if (targetUser.balance < amount) {
             return { success: false, msg: '⚠️ 用户 ' + fromUsername + ' 余额不足（当前 ' + targetUser.balance.toFixed(2) + '）' };
         }
         const newBalance = Math.round((targetUser.balance - amount) * 100) / 100;
-        await supabaseRequest('PATCH', 'users', { balance: newBalance }, { username: 'eq.' + fromUsername });
+        await updateBalance(fromUsername, newBalance);
         await addTransaction(fromUsername, '管理员扣款', amount, '管理员扣减');
         return { success: true, msg: '✅ 成功从 ' + fromUsername + ' 扣减 ' + amount.toFixed(2) + '，剩余 ' + newBalance.toFixed(2) };
     }
@@ -694,7 +580,7 @@
     // ---- 删除用户 ----
     async function deleteUser(username) {
         if (!(await userExists(username))) return { success: false, msg: '⚠️ 用户不存在' };
-        if (username === currentUser) return { success: false, msg: '⚠️ 不能删除自己（当前登录用户）' };
+        if (username === currentUser) return { success: false, msg: '⚠️ 不能删除自己' };
         await supabaseRequest('DELETE', 'users', null, { username: 'eq.' + username });
         return { success: true, msg: '✅ 用户 ' + username + ' 已删除' };
     }
@@ -703,21 +589,18 @@
     //  UI 渲染
     // ============================================================
     async function renderBalance() {
-        if (currentUser) {
-            try {
-                const user = await getUser(currentUser);
-                if (user) {
-                    document.getElementById('balanceDisplay').textContent = '💰 ' + user.balance.toFixed(2);
-                    document.getElementById('currentUserDisplay').textContent = currentUser;
-                }
-            } catch(e) {
-                console.warn('获取余额失败', e);
+        if (!currentUser) return;
+        try {
+            const user = await getUser(currentUser);
+            if (user) {
+                $('balanceDisplay').textContent = '💰 ' + user.balance.toFixed(2);
+                $('currentUserDisplay').textContent = currentUser;
             }
-        }
+        } catch(e) { console.warn('渲染余额失败', e); }
     }
 
     async function renderLogs(username) {
-        const container = document.getElementById('logContainer');
+        const container = $('logContainer');
         try {
             const transactions = await getTransactions(username);
             if (!transactions || transactions.length === 0) {
@@ -726,18 +609,20 @@
             }
             const logs = transactions.slice().reverse().slice(0, 15);
             container.innerHTML = logs.map(entry => {
-                const sign = entry.type.includes('收入') || entry.type.includes('加钱') ? '+' :
-                            (entry.type.includes('支出') || entry.type.includes('扣款') ? '-' : '');
-                return '<div class="log-entry">[' + entry.time + '] ' + entry.type + ' ' + sign +
-                       entry.amount.toFixed(2) + ' ' + (entry.target ? '→ ' + entry.target : '') + '</div>';
+                let sign = '';
+                if (entry.type.includes('收入') || entry.type.includes('加钱')) sign = '+';
+                else if (entry.type.includes('支出') || entry.type.includes('扣款')) sign = '-';
+                return '<div class="log-entry">[' + entry.time + '] ' + entry.type +
+                       ' ' + sign + entry.amount.toFixed(2) +
+                       (entry.target ? ' → ' + entry.target : '') + '</div>';
             }).join('');
         } catch(e) {
-            container.innerHTML = '<div class="log-entry" style="color:#c0392b;">⚠️ 加载记录失败</div>';
+            container.innerHTML = '<div class="log-entry" style="color:#c0392b;">⚠️ 加载记录失败: ' + e.message + '</div>';
         }
     }
 
     async function renderUserList() {
-        const container = document.getElementById('userListContainer');
+        const container = $('userListContainer');
         try {
             const users = await getAllUsers();
             if (users.length === 0) {
@@ -749,40 +634,33 @@
                 '</span><span class="user-balance">💰 ' + u.balance.toFixed(2) + '</span></div>'
             ).join('');
         } catch(e) {
-            container.innerHTML = '<div style="font-size:13px; color:#c0392b;">加载失败，请刷新重试</div>';
+            container.innerHTML = '<div style="font-size:13px; color:#c0392b;">加载失败: ' + e.message + '</div>';
         }
     }
 
     async function refreshUI() {
         await renderBalance();
-        if (currentUser) {
-            await renderLogs(currentUser);
-        }
-        if (document.getElementById('adminContent').style.display !== 'none') {
-            await renderUserList();
-        }
+        if (currentUser) await renderLogs(currentUser);
+        if ($('adminContent').style.display !== 'none') await renderUserList();
     }
 
-    // ============================================================
-    //  页面切换
-    // ============================================================
     function showAuthPage() {
-        document.getElementById('authPage').classList.remove('hidden');
-        document.getElementById('bankPage').classList.add('hidden');
-        document.getElementById('authMsg').textContent = '';
-        document.getElementById('authMsg').className = 'msg-box';
+        $('authPage').classList.remove('hidden');
+        $('bankPage').classList.add('hidden');
+        $('authMsg').textContent = '';
+        $('authMsg').className = 'msg-box';
     }
 
     function showBankPage() {
-        document.getElementById('authPage').classList.add('hidden');
-        document.getElementById('bankPage').classList.remove('hidden');
+        $('authPage').classList.add('hidden');
+        $('bankPage').classList.remove('hidden');
         refreshUI();
-        document.getElementById('adminContent').style.display = 'none';
-        document.getElementById('adminFeedback').textContent = '';
-        document.getElementById('adminDeductResult').textContent = '';
-        document.getElementById('adminPasswordInput').value = '';
-        document.getElementById('transferMsg').textContent = '';
-        document.getElementById('transferMsg').className = 'msg-box';
+        $('adminContent').style.display = 'none';
+        $('adminFeedback').textContent = '';
+        $('adminDeductResult').textContent = '';
+        $('adminPasswordInput').value = '';
+        $('transferMsg').textContent = '';
+        $('transferMsg').className = 'msg-box';
     }
 
     // ============================================================
@@ -790,28 +668,20 @@
     // ============================================================
 
     // ---- 注册 ----
-    document.getElementById('authRegisterBtn').addEventListener('click', async function(e) {
+    $('authRegisterBtn').addEventListener('click', async function(e) {
         e.preventDefault();
         if (isLoading) return;
         isLoading = true;
         setLoading('authRegisterBtn', true);
 
-        const uname = document.getElementById('authUsername').value.trim();
-        const pwd = document.getElementById('authPassword').value.trim();
+        const uname = $('authUsername').value.trim();
+        const pwd = $('authPassword').value.trim();
 
         try {
-            if (!uname || !pwd) {
-                showMsg('authMsg', '⚠️ 账户名和密码不能为空');
-                return;
-            }
-            if (await userExists(uname)) {
-                showMsg('authMsg', '⚠️ 账户名 "' + uname + '" 已被占用');
-                return;
-            }
-
+            if (!uname || !pwd) { showMsg('authMsg', '⚠️ 账户名和密码不能为空'); return; }
+            if (await userExists(uname)) { showMsg('authMsg', '⚠️ 账户名 "' + uname + '" 已被占用'); return; }
             await createUser(uname, pwd);
             showMsg('authMsg', '✅ 注册成功！账户: ' + uname + '，初始余额 100', false);
-
             currentUser = uname;
             showBankPage();
         } catch(e) {
@@ -823,31 +693,20 @@
     });
 
     // ---- 登录 ----
-    document.getElementById('authLoginBtn').addEventListener('click', async function(e) {
+    $('authLoginBtn').addEventListener('click', async function(e) {
         e.preventDefault();
         if (isLoading) return;
         isLoading = true;
         setLoading('authLoginBtn', true);
 
-        const uname = document.getElementById('authUsername').value.trim();
-        const pwd = document.getElementById('authPassword').value.trim();
+        const uname = $('authUsername').value.trim();
+        const pwd = $('authPassword').value.trim();
 
         try {
-            if (!uname || !pwd) {
-                showMsg('authMsg', '⚠️ 请输入账户名和密码');
-                return;
-            }
-
+            if (!uname || !pwd) { showMsg('authMsg', '⚠️ 请输入账户名和密码'); return; }
             const user = await getUser(uname);
-            if (!user) {
-                showMsg('authMsg', '⚠️ 用户 "' + uname + '" 不存在');
-                return;
-            }
-            if (user.password !== pwd) {
-                showMsg('authMsg', '⚠️ 密码错误');
-                return;
-            }
-
+            if (!user) { showMsg('authMsg', '⚠️ 用户 "' + uname + '" 不存在'); return; }
+            if (user.password !== pwd) { showMsg('authMsg', '⚠️ 密码错误'); return; }
             showMsg('authMsg', '✅ 登录成功！', false);
             currentUser = uname;
             showBankPage();
@@ -860,47 +719,36 @@
     });
 
     // ---- 回车键 ----
-    document.getElementById('authPassword').addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') document.getElementById('authLoginBtn').click();
-    });
-    document.getElementById('authUsername').addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') document.getElementById('authLoginBtn').click();
-    });
+    $('authPassword').addEventListener('keypress', e => { if (e.key === 'Enter') $('authLoginBtn').click(); });
+    $('authUsername').addEventListener('keypress', e => { if (e.key === 'Enter') $('authLoginBtn').click(); });
 
     // ---- 退出 ----
-    document.getElementById('bankLogoutBtn').addEventListener('click', function() {
+    $('bankLogoutBtn').addEventListener('click', function() {
         currentUser = null;
         showAuthPage();
-        document.getElementById('authPassword').value = '';
-        document.getElementById('authUsername').value = '';
+        $('authPassword').value = '';
+        $('authUsername').value = '';
         showMsg('authMsg', '已退出', false);
     });
 
     // ---- 转账 ----
-    document.getElementById('transferBtn').addEventListener('click', async function() {
+    $('transferBtn').addEventListener('click', async function() {
         if (isLoading) return;
         isLoading = true;
         setLoading('transferBtn', true);
 
-        const target = document.getElementById('transferTarget').value.trim();
-        const amount = parseFloat(document.getElementById('transferAmount').value);
+        const target = $('transferTarget').value.trim();
+        const amount = parseFloat($('transferAmount').value);
 
         try {
-            if (!target) {
-                showMsg('transferMsg', '⚠️ 请输入目标账户名');
-                return;
-            }
-            if (isNaN(amount) || amount <= 0) {
-                showMsg('transferMsg', '⚠️ 请输入有效金额');
-                return;
-            }
-
+            if (!target) { showMsg('transferMsg', '⚠️ 请输入目标账户名'); return; }
+            if (isNaN(amount) || amount <= 0) { showMsg('transferMsg', '⚠️ 请输入有效金额'); return; }
             const result = await userTransfer(currentUser, target, amount);
             showMsg('transferMsg', result.msg, !result.success);
             if (result.success) {
                 await refreshUI();
-                document.getElementById('transferTarget').value = '';
-                document.getElementById('transferAmount').value = '';
+                $('transferTarget').value = '';
+                $('transferAmount').value = '';
             }
         } catch(e) {
             showMsg('transferMsg', '⚠️ 转账失败: ' + e.message);
@@ -911,44 +759,41 @@
     });
 
     // ---- 刷新 ----
-    document.getElementById('refreshLogBtn').addEventListener('click', async function() {
+    $('refreshLogBtn').addEventListener('click', async function() {
         if (currentUser) await refreshUI();
         showMsg('transferMsg', '✅ 已刷新', false);
-        setTimeout(() => {
-            document.getElementById('transferMsg').textContent = '';
-            document.getElementById('transferMsg').className = 'msg-box';
-        }, 1500);
+        setTimeout(() => { $('transferMsg').textContent = ''; $('transferMsg').className = 'msg-box'; }, 1500);
     });
 
     // ============================================================
-    //  管理员功能
+    //  管理员
     // ============================================================
 
-    document.getElementById('adminUnlockBtn').addEventListener('click', function() {
-        const pwd = document.getElementById('adminPasswordInput').value.trim();
-        const feedback = document.getElementById('adminFeedback');
+    $('adminUnlockBtn').addEventListener('click', function() {
+        const pwd = $('adminPasswordInput').value.trim();
+        const feedback = $('adminFeedback');
         if (pwd === '911') {
-            document.getElementById('adminContent').style.display = 'block';
+            $('adminContent').style.display = 'block';
             feedback.textContent = '✅ 管理员模式已激活';
             feedback.style.color = '#27ae60';
-            document.getElementById('adminPasswordInput').value = '';
+            $('adminPasswordInput').value = '';
             renderUserList();
         } else {
             feedback.textContent = '❌ 密码错误';
             feedback.style.color = '#c0392b';
-            document.getElementById('adminContent').style.display = 'none';
+            $('adminContent').style.display = 'none';
         }
     });
 
-    document.getElementById('adminRefreshUsersBtn').addEventListener('click', async function() {
+    $('adminRefreshUsersBtn').addEventListener('click', async function() {
         await renderUserList();
-        document.getElementById('adminFeedback').textContent = '✅ 用户列表已刷新';
-        document.getElementById('adminFeedback').style.color = '#27ae60';
+        $('adminFeedback').textContent = '✅ 用户列表已刷新';
+        $('adminFeedback').style.color = '#27ae60';
     });
 
-    document.getElementById('adminViewLogBtn').addEventListener('click', async function() {
-        const uname = document.getElementById('adminViewUser').value.trim();
-        const resultEl = document.getElementById('adminViewLogResult');
+    $('adminViewLogBtn').addEventListener('click', async function() {
+        const uname = $('adminViewUser').value.trim();
+        const resultEl = $('adminViewLogResult');
         if (!uname) { resultEl.textContent = '⚠️ 请输入用户名'; return; }
         try {
             const user = await getUser(uname);
@@ -970,27 +815,20 @@
         }
     });
 
-    document.getElementById('adminTransferBtn').addEventListener('click', async function() {
+    $('adminTransferBtn').addEventListener('click', async function() {
         if (isLoading) return;
         isLoading = true;
         setLoading('adminTransferBtn', true);
-
-        const target = document.getElementById('adminTransferTarget').value.trim();
-        const amount = parseFloat(document.getElementById('adminTransferAmount').value);
-        const feedback = document.getElementById('adminFeedback');
-
+        const target = $('adminTransferTarget').value.trim();
+        const amount = parseFloat($('adminTransferAmount').value);
+        const feedback = $('adminFeedback');
         try {
             if (!target) { feedback.textContent = '⚠️ 请输入目标用户'; return; }
             if (isNaN(amount) || amount <= 0) { feedback.textContent = '⚠️ 请输入有效金额'; return; }
             const result = await adminTransfer(target, amount);
             feedback.textContent = result.msg;
             feedback.style.color = result.success ? '#27ae60' : '#c0392b';
-            if (result.success) {
-                await refreshUI();
-                await renderUserList();
-                document.getElementById('adminTransferTarget').value = '';
-                document.getElementById('adminTransferAmount').value = '';
-            }
+            if (result.success) { await refreshUI(); await renderUserList(); $('adminTransferTarget').value = ''; $('adminTransferAmount').value = ''; }
         } catch(e) {
             feedback.textContent = '⚠️ 操作失败: ' + e.message;
             feedback.style.color = '#c0392b';
@@ -1000,27 +838,20 @@
         }
     });
 
-    document.getElementById('adminDeductBtn').addEventListener('click', async function() {
+    $('adminDeductBtn').addEventListener('click', async function() {
         if (isLoading) return;
         isLoading = true;
         setLoading('adminDeductBtn', true);
-
-        const target = document.getElementById('adminDeductTarget').value.trim();
-        const amount = parseFloat(document.getElementById('adminDeductAmount').value);
-        const resultEl = document.getElementById('adminDeductResult');
-
+        const target = $('adminDeductTarget').value.trim();
+        const amount = parseFloat($('adminDeductAmount').value);
+        const resultEl = $('adminDeductResult');
         try {
             if (!target) { resultEl.textContent = '⚠️ 请输入目标用户'; return; }
             if (isNaN(amount) || amount <= 0) { resultEl.textContent = '⚠️ 请输入有效金额'; return; }
             const result = await adminDeduct(target, amount);
             resultEl.textContent = result.msg;
             resultEl.style.color = result.success ? '#27ae60' : '#c0392b';
-            if (result.success) {
-                await refreshUI();
-                await renderUserList();
-                document.getElementById('adminDeductTarget').value = '';
-                document.getElementById('adminDeductAmount').value = '';
-            }
+            if (result.success) { await refreshUI(); await renderUserList(); $('adminDeductTarget').value = ''; $('adminDeductAmount').value = ''; }
         } catch(e) {
             resultEl.textContent = '⚠️ 操作失败: ' + e.message;
             resultEl.style.color = '#c0392b';
@@ -1030,28 +861,22 @@
         }
     });
 
-    document.getElementById('adminDeleteUserBtn').addEventListener('click', async function() {
+    $('adminDeleteUserBtn').addEventListener('click', async function() {
         if (isLoading) return;
-        const uname = document.getElementById('adminDeleteUser').value.trim();
-        const resultEl = document.getElementById('adminDeleteResult');
+        const uname = $('adminDeleteUser').value.trim();
+        const resultEl = $('adminDeleteResult');
         if (!uname) { resultEl.textContent = '⚠️ 请输入要删除的用户名'; return; }
         if (!confirm('⚠️ 确定要删除用户 "' + uname + '" 吗？此操作不可恢复！')) {
             resultEl.textContent = '已取消删除';
             return;
         }
-
         isLoading = true;
         setLoading('adminDeleteUserBtn', true);
-
         try {
             const result = await deleteUser(uname);
             resultEl.textContent = result.msg;
             resultEl.style.color = result.success ? '#27ae60' : '#c0392b';
-            if (result.success) {
-                await refreshUI();
-                await renderUserList();
-                document.getElementById('adminDeleteUser').value = '';
-            }
+            if (result.success) { await refreshUI(); await renderUserList(); $('adminDeleteUser').value = ''; }
         } catch(e) {
             resultEl.textContent = '⚠️ 删除失败: ' + e.message;
             resultEl.style.color = '#c0392b';
@@ -1063,8 +888,8 @@
 
     // ---- 初始化 ----
     showAuthPage();
-    document.getElementById('authUsername').value = '';
-    document.getElementById('authPassword').value = '';
+    $('authUsername').value = '';
+    $('authPassword').value = '';
 </script>
 </body>
 </html>
