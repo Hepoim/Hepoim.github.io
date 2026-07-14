@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>福克斯山银行</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            min-height: 100vh;
+            background: linear-gradient(145deg, #e9f0f5 0%, #d3dee8 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 16px;
+        }
+        .auth-container {
+            max-width: 420px;
+            width: 100%;
+            background: rgba(255,255,255,0.95);
+            border-radius: 32px;
+            padding: 36px 28px 32px;
+            box-shadow: 0 20px 40px rgba(0,20,40,0.2);
+        }
+        .auth-container .logo {
+            text-align: center;
+            margin-bottom: 8px;
+        }
+        .auth-container .logo svg {
+            width: 64px;
+            height: 64px;
+        }
+        .auth-container h1 {
+            font-size: 26px;
+            color: #1a2e3f;
+            text-align: center;
+            margin-bottom: 4px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+        .auth-container .subhead {
+            color: #3e5a6b;
+            font-size: 14px;
+            text-align: center;
+            margin-bottom: 28px;
+            opacity: 0.7;
+        }
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            margin-bottom: 16px;
+        }
+        .input-group label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #2b4b5e;
+        }
+        .input-group input {
+            background: white;
+            border: 1px solid #cbd9e5;
+            border-radius: 40px;
+            padding: 14px 18px;
+            font-size: 16px;
+            outline: none;
+            width: 100%;
+        }
+        .input-group input:focus {
+            border-color: #3f7b9e;
+            box-shadow: 0 0 0 3px rgba(63, 123, 158, 0.2);
+        }
+        .btn {
+            border: none;
+            border-radius: 60px;
+            padding: 14px 24px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.15s;
+            width: 100%;
+            text-align: center;
+        }
+        .btn-primary {
+            background: #1a3a4a;
+            color: white;
+        }
+        .btn-primary:active {
+            transform: scale(0.96);
+        }
+        .btn-outline {
+            background: transparent;
+            border: 2px solid #3f6a84;
+            color: #1d3f57;
+        }
+        .btn-success {
+            background: #27ae60;
+            color: white;
+        }
+        .btn-danger {
+            background: #c0392b;
+            color: white;
+        }
+        .btn-warning {
+            background: #e67e22;
+            color: white;
+        }
+        .flex-row {
+            display: flex;
+            gap: 12px;
+            margin-top: 8px;
+        }
+        .flex-row .btn {
+            flex: 1;
+        }
+        .msg-box {
+            text-align: center;
+            margin-top: 14px;
+            padding: 10px;
+            border-radius: 16px;
+            font-size: 14px;
+            min-height: 20px;
+        }
+        .msg-error {
+            color: #c0392b;
+            background: #fde8e8;
+        }
+        .msg-success {
+            color: #27ae60;
+            background: #e8f8ed;
+        }
+        .hidden {
+            display: none !important;
+        }
+        .flex-between {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .balance-badge {
+            background: #1a3a4a;
+            color: white;
+            padding: 6px 16px;
+            border-radius: 60px;
+            font-size: 16px;
+            font-weight: 600;
+        }
+        .divider {
+            border: none;
+            border-top: 2px dashed #b7cdde;
+            margin: 18px 0;
+        }
+        .grid-2col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        .log-area {
+            background: #edf4fa;
+            border-radius: 20px;
+            padding: 12px 16px;
+            max-height: 200px;
+            overflow-y: auto;
+            font-size: 14px;
+            border: 1px solid #c8dbe9;
+            margin-top: 8px;
+        }
+        .log-entry {
+            padding: 6px 0;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            color: #14303f;
+            font-size: 13px;
+            word-break: break-all;
+        }
+        .log-entry:last-child {
+            border-bottom: none;
+        }
+        .admin-panel {
+            background: #dce6ef;
+            border-radius: 28px;
+            padding: 16px;
+            margin-top: 16px;
+            border: 1px solid #b1cada;
+        }
+        .admin-panel .admin-section {
+            background: rgba(255,255,255,0.5);
+            border-radius: 16px;
+            padding: 12px;
+            margin-top: 10px;
+        }
+        .admin-panel .admin-section:first-of-type {
+            margin-top: 0;
+        }
+        .admin-panel .admin-section-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #1a2e3f;
+            margin-bottom: 8px;
+        }
+        .small-note {
+            font-size: 12px;
+            opacity: 0.6;
+            margin-top: 12px;
+            text-align: center;
+        }
+        .bank-container {
+            max-width: 500px;
+            width: 100%;
+            background: rgba(255,255,255,0.92);
+            border-radius: 32px;
+            padding: 24px 20px 28px;
+            box-shadow: 0 20px 40px rgba(0,20,40,0.2);
+        }
+        .bank-container .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .bank-container .logo svg {
+            width: 36px;
+            height: 36px;
+        }
+        .bank-container .logo h1 {
+            font-size: 20px;
+            margin: 0;
+            color: #1a2e3f;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+        .btn-sm {
+            padding: 6px 16px;
+            width: auto;
+            font-size: 13px;
+        }
+        .user-list-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 6px 10px;
+            background: white;
+            border-radius: 12px;
+            margin-bottom: 4px;
+            font-size: 14px;
+        }
+        .user-list-item .user-name {
+            font-weight: 500;
+            color: #1a2e3f;
+        }
+        .user-list-item .user-balance {
+            color: #1d3f57;
+            font-weight: 600;
+        }
+        @media (max-width: 480px) {
+            .auth-container { padding: 24px 18px 28px; }
+            .bank-container { padding: 18px 14px 22px; }
+            .grid-2col { grid-template-columns: 1fr; gap: 4px; }
+            .flex-row { flex-wrap: wrap; }
+            .flex-row .btn { flex: 1 1 40%; }
+            .bank-container .logo h1 { font-size: 17px; }
+            .bank-container .logo svg { width: 28px; height: 28px; }
+            .auth-container .logo svg { width: 48px; height: 48px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ===== 登录/注册界面 ===== -->
+<div id="authPage" class="auth-container">
+    <div class="logo">
+        <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="10,85 30,35 50,60 70,25 90,85" fill="#2c5a3a" stroke="#1a3a2a" stroke-width="2"/>
+            <polygon points="30,35 40,48 35,48 30,35" fill="white" opacity="0.7"/>
+            <polygon points="70,25 78,40 72,40 70,25" fill="white" opacity="0.7"/>
+            <circle cx="80" cy="28" r="10" fill="#f1c40f" stroke="#d4a800" stroke-width="1.5"/>
+            <ellipse cx="25" cy="28" rx="14" ry="7" fill="white" opacity="0.8"/>
+            <ellipse cx="32" cy="25" rx="10" ry="6" fill="white" opacity="0.8"/>
+            <ellipse cx="18" cy="25" rx="8" ry="5" fill="white" opacity="0.8"/>
+            <rect x="42" y="65" width="16" height="20" fill="#d4a373" stroke="#b8895a" stroke-width="1.5"/>
+            <polygon points="38,65 50,50 62,65" fill="#a0522d" stroke="#8b4513" stroke-width="1.5"/>
+            <rect x="46" y="73" width="8" height="12" fill="#8b5e3c" stroke="#6d4c2a" stroke-width="1"/>
+            <rect x="66" y="55" width="4" height="30" fill="#b8860b" stroke="#8b6900" stroke-width="1"/>
+            <polygon points="63,55 68,48 73,55" fill="#b8860b" stroke="#8b6900" stroke-width="1"/>
+            <rect x="5" y="85" width="90" height="10" fill="#4a8c3f" rx="2"/>
+            <ellipse cx="15" cy="85" rx="6" ry="4" fill="#5a9c4f"/>
+            <ellipse cx="85" cy="85" rx="8" ry="4" fill="#5a9c4f"/>
+            <ellipse cx="50" cy="86" rx="10" ry="4" fill="#5a9c4f"/>
+        </svg>
+    </div>
+    <h1>福克斯山银行</h1>
+    <div class="subhead">登录 或 注册新账户</div>
+
+    <div class="input-group">
+        <label>👤 账户名</label>
+        <input type="text" id="authUsername" placeholder="请输入用户名" value="">
+    </div>
+    <div class="input-group">
+        <label>🔑 密码</label>
+        <input type="password" id="authPassword" placeholder="请输入密码" value="">
+    </div>
+
+    <div class="flex-row">
+        <button class="btn btn-primary" id="authLoginBtn">🔓 登录</button>
+        <button class="btn btn-outline" id="authRegisterBtn">📝 注册</button>
+    </div>
+
+    <div id="authMsg" class="msg-box"></div>
+
+    <div style="margin-top:20px;padding:14px;background:#f0f4f8;border-radius:16px;font-size:13px;color:#3e5a6b;text-align:center;">
+        💡 还没有账户？点击 <strong>"注册"</strong> 创建新账户
+    </div>
+</div>
+
+<!-- ===== 银行主界面 ===== -->
+<div id="bankPage" class="bank-container hidden">
+    <div class="flex-between">
+        <div class="logo">
+            <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <polygon points="10,85 30,35 50,60 70,25 90,85" fill="#2c5a3a" stroke="#1a3a2a" stroke-width="2"/>
+                <polygon points="30,35 40,48 35,48 30,35" fill="white" opacity="0.7"/>
+                <polygon points="70,25 78,40 72,40 70,25" fill="white" opacity="0.7"/>
+                <circle cx="80" cy="28" r="10" fill="#f1c40f" stroke="#d4a800" stroke-width="1.5"/>
+                <ellipse cx="25" cy="28" rx="14" ry="7" fill="white" opacity="0.8"/>
+                <ellipse cx="32" cy="25" rx="10" ry="6" fill="white" opacity="0.8"/>
+                <ellipse cx="18" cy="25" rx="8" ry="5" fill="white" opacity="0.8"/>
+                <rect x="42" y="65" width="16" height="20" fill="#d4a373" stroke="#b8895a" stroke-width="1.5"/>
+                <polygon points="38,65 50,50 62,65" fill="#a0522d" stroke="#8b4513" stroke-width="1.5"/>
+                <rect x="46" y="73" width="8" height="12" fill="#8b5e3c" stroke="#6d4c2a" stroke-width="1"/>
+                <rect x="66" y="55" width="4" height="30" fill="#b8860b" stroke="#8b6900" stroke-width="1"/>
+                <polygon points="63,55 68,48 73,55" fill="#b8860b" stroke="#8b6900" stroke-width="1"/>
+                <rect x="5" y="85" width="90" height="10" fill="#4a8c3f" rx="2"/>
+                <ellipse cx="15" cy="85" rx="6" ry="4" fill="#5a9c4f"/>
+                <ellipse cx="85" cy="85" rx="8" ry="4" fill="#5a9c4f"/>
+                <ellipse cx="50" cy="86" rx="10" ry="4" fill="#5a9c4f"/>
+            </svg>
+            <h1>福克斯山银行</h1>
+        </div>
+        <span class="balance-badge" id="balanceDisplay">💰 0.00</span>
+    </div>
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; padding-left:44px;">
+        <span style="font-size:14px; color:#3e5a6b;">欢迎，<strong id="currentUserDisplay">用户</strong></span>
+        <button class="btn btn-sm" id="bankLogoutBtn">🚪 退出</button>
+    </div>
+
+    <hr class="divider">
+
+    <div class="grid-2col">
+        <div class="input-group">
+            <label>📤 转给</label>
+            <input type="text" id="transferTarget" placeholder="目标用户名">
+        </div>
+        <div class="input-group">
+            <label>💰 金额</label>
+            <input type="number" id="transferAmount" placeholder="0.00" step="0.01" min="0">
+        </div>
+    </div>
+    <button class="btn btn-primary" id="transferBtn">💸 转账</button>
+    <div id="transferMsg" class="msg-box"></div>
+
+    <div style="margin-top:16px;">
+        <div class="flex-between">
+            <span style="font-weight:600; color:#1a2e3f;">📋 交易记录</span>
+            <button class="btn btn-sm" id="refreshLogBtn">🔄 刷新</button>
+        </div>
+        <div class="log-area" id="logContainer">
+            <div class="log-entry" style="opacity:0.5;">—— 暂无记录 ——</div>
+        </div>
+    </div>
+
+    <!-- ===== 管理员面板 ===== -->
+    <div class="admin-panel">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+            <span style="font-weight:600; color:#1a2e3f;">🔐 管理员</span>
+            <span style="font-size:11px; background:#3f5e73; color:white; padding:2px 10px; border-radius:60px;">需密码激活</span>
+        </div>
+        <div class="flex-row" style="margin-top:6px;">
+            <div class="input-group" style="flex:2; margin:0;">
+                <input type="password" id="adminPasswordInput" placeholder="输入管理员密码" style="width:100%;">
+            </div>
+            <button class="btn" id="adminUnlockBtn" style="flex:0 0 auto; padding:12px 18px; width:auto;">🔑 解锁</button>
+        </div>
+
+        <!-- 管理员内容（解锁后显示） -->
+        <div id="adminContent" style="display:none; margin-top:10px;">
+
+            <!-- 查看所有用户及余额 -->
+            <div class="admin-section">
+                <div class="admin-section-title">👥 所有用户及余额</div>
+                <div id="userListContainer">
+                    <div style="font-size:13px; color:#6a7f8f;">加载中...</div>
+                </div>
+                <button class="btn btn-sm" id="adminRefreshUsersBtn" style="margin-top:6px; width:auto;">🔄 刷新用户列表</button>
+            </div>
+
+            <!-- 查看单个用户记录 -->
+            <div class="admin-section">
+                <div class="admin-section-title">📄 查看用户交易记录</div>
+                <div class="flex-row" style="margin-top:4px;">
+                    <div class="input-group" style="flex:2; margin:0;">
+                        <input type="text" id="adminViewUser" placeholder="输入用户名">
+                    </div>
+                    <button class="btn btn-sm" id="adminViewLogBtn" style="width:auto; flex:0 0 auto;">查看</button>
+                </div>
+                <div id="adminViewLogResult" style="font-size:13px; margin-top:4px; color:#1f4a5e; max-height:80px; overflow-y:auto;"></div>
+            </div>
+
+            <!-- 管理员转账（加钱） -->
+            <div class="admin-section">
+                <div class="admin-section-title">💸 管理员转账（加钱 · 无限资产）</div>
+                <div class="grid-2col">
+                    <div class="input-group" style="margin:0;">
+                        <label style="font-size:12px;">目标用户</label>
+                        <input type="text" id="adminTransferTarget" placeholder="用户名" style="padding:10px 16px; font-size:14px;">
+                    </div>
+                    <div class="input-group" style="margin:0;">
+                        <label style="font-size:12px;">金额</label>
+                        <input type="number" id="adminTransferAmount" placeholder="0.00" step="0.01" min="0" style="padding:10px 16px; font-size:14px;">
+                    </div>
+                </div>
+                <button class="btn btn-success" id="adminTransferBtn" style="margin-top:6px;">➕ 加钱</button>
+                <div id="adminFeedback" style="font-size:13px; margin-top:4px;"></div>
+            </div>
+
+            <!-- 扣减余额 -->
+            <div class="admin-section" style="border-left:3px solid #e67e22;">
+                <div class="admin-section-title" style="color:#e67e22;">💰 扣减用户余额</div>
+                <div class="grid-2col">
+                    <div class="input-group" style="margin:0;">
+                        <label style="font-size:12px;">目标用户</label>
+                        <input type="text" id="adminDeductTarget" placeholder="用户名" style="padding:10px 16px; font-size:14px;">
+                    </div>
+                    <div class="input-group" style="margin:0;">
+                        <label style="font-size:12px;">扣减金额</label>
+                        <input type="number" id="adminDeductAmount" placeholder="0.00" step="0.01" min="0" style="padding:10px 16px; font-size:14px;">
+                    </div>
+                </div>
+                <button class="btn btn-warning" id="adminDeductBtn" style="margin-top:6px;">➖ 扣减余额</button>
+                <div id="adminDeductResult" style="font-size:13px; margin-top:4px;"></div>
+            </div>
+
+            <!-- 删除用户 -->
+            <div class="admin-section" style="border-left:3px solid #c0392b;">
+                <div class="admin-section-title" style="color:#c0392b;">🗑️ 删除用户（危险操作）</div>
+                <div class="flex-row" style="margin-top:4px;">
+                    <div class="input-group" style="flex:2; margin:0;">
+                        <input type="text" id="adminDeleteUser" placeholder="输入要删除的用户名">
+                    </div>
+                    <button class="btn btn-danger" id="adminDeleteUserBtn" style="width:auto; flex:0 0 auto;">🗑️ 删除</button>
+                </div>
+                <div id="adminDeleteResult" style="font-size:13px; margin-top:4px;"></div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="small-note">💡 账户名唯一 · 数据保存在本地</div>
+</div>
+
+<script>
+    // ============================================================
+    //  数据层
+    // ============================================================
+    const STORAGE_KEY = 'rp_bank_data';
+    let bankData = { users: {} };
+    let currentUser = null;
+
+    function loadData() {
+        const stored = localStorage.getItem(STORAGE_KEY);
+        if (stored) {
+            try {
+                const parsed = JSON.parse(stored);
+                bankData.users = parsed.users || {};
+                for (let u in bankData.users) {
+                    if (!bankData.users[u].transactions) bankData.users[u].transactions = [];
+                    if (typeof bankData.users[u].balance !== 'number') bankData.users[u].balance = 0;
+                }
+            } catch(e) {
+                bankData.users = {};
+            }
+        } else {
+            bankData.users = {};
+        }
+        saveData();
+    }
+
+    function saveData() {
+        try {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(bankData));
+        } catch(e) {
+            console.error('保存失败', e);
+        }
+    }
+
+    function getUser(username) {
+        return bankData.users[username] || null;
+    }
+
+    function userExists(username) {
+        return !!bankData.users[username];
+    }
+
+    function addTransaction(username, type, amount, target) {
+        const user = getUser(username);
+        if (!user) return false;
+        user.transactions.push({
+            type: type,
+            amount: typeof amount === 'number' ? amount : parseFloat(amount) || 0,
+            target: target || '系统',
+            time: new Date().toLocaleString()
+        });
+        saveData();
+        return true;
+    }
+
+    function getAllUsers() {
+        return Object.keys(bankData.users).map(name => ({
+            name: name,
+            balance: bankData.users[name].balance || 0
+        }));
+    }
+
+    // 普通转账
+    function userTransfer(from, to, amount) {
+        amount = parseFloat(amount);
+        if (isNaN(amount) || amount <= 0) return { success: false, msg: '⚠️ 金额必须大于0' };
+        if (!userExists(to)) return { success: false, msg: '⚠️ 目标用户不存在' };
+        if (from === to) return { success: false, msg: '⚠️ 不能转给自己' };
+        const fromUser = getUser(from);
+        if (!fromUser) return { success: false, msg: '⚠️ 账户异常' };
+        if (fromUser.balance < amount) return { success: false, msg: '⚠️ 余额不足' };
+        fromUser.balance = Math.round((fromUser.balance - amount) * 100) / 100;
+        const toUser = getUser(to);
+        toUser.balance = Math.round((toUser.balance + amount) * 100) / 100;
+        addTransaction(from, '转账支出', amount, to);
+        addTransaction(to, '转账收入', amount, from);
+        saveData();
+        return { success: true, msg: '✅ 转账 ' + amount.toFixed(2) + ' 给 ' + to + ' 成功' };
+    }
+
+    // 管理员加钱
+    function adminTransfer(toUsername, amount) {
+        amount = parseFloat(amount);
+        if (isNaN(amount) || amount <= 0) return { success: false, msg: '⚠️ 金额必须大于0' };
+        if (!userExists(toUsername)) return { success: false, msg: '⚠️ 目标用户不存在' };
+        const targetUser = getUser(toUsername);
+        targetUser.balance = Math.round(((targetUser.balance || 0) + amount) * 100) / 100;
+        addTransaction(toUsername, '管理员加钱', amount, '管理员');
+        saveData();
+        return { success: true, msg: '✅ 成功给 ' + toUsername + ' 加钱 ' + amount.toFixed(2) };
+    }
+
+    // 管理员扣减余额
+    function adminDeduct(fromUsername, amount) {
+        amount = parseFloat(amount);
+        if (isNaN(amount) || amount <= 0) return { success: false, msg: '⚠️ 扣减金额必须大于0' };
+        if (!userExists(fromUsername)) return { success: false, msg: '⚠️ 目标用户不存在' };
+        const targetUser = getUser(fromUsername);
+        if (targetUser.balance < amount) {
+            return { success: false, msg: '⚠️ 用户 ' + fromUsername + ' 余额不足（当前 ' + targetUser.balance.toFixed(2) + '）' };
+        }
+        targetUser.balance = Math.round((targetUser.balance - amount) * 100) / 100;
+        addTransaction(fromUsername, '管理员扣款', amount, '管理员扣减');
+        saveData();
+        return { success: true, msg: '✅ 成功从 ' + fromUsername + ' 扣减 ' + amount.toFixed(2) + '，剩余 ' + targetUser.balance.toFixed(2) };
+    }
+
+    // 删除用户
+    function deleteUser(username) {
+        if (!userExists(username)) return { success: false, msg: '⚠️ 用户不存在' };
+        if (username === currentUser) return { success: false, msg: '⚠️ 不能删除自己（当前登录用户）' };
+        delete bankData.users[username];
+        saveData();
+        return { success: true, msg: '✅ 用户 ' + username + ' 已删除' };
+    }
+
+    // ============================================================
+    //  UI 渲染
+    // ============================================================
+    function renderBalance() {
+        if (currentUser && getUser(currentUser)) {
+            document.getElementById('balanceDisplay').textContent = '💰 ' + getUser(currentUser).balance.toFixed(2);
+            document.getElementById('currentUserDisplay').textContent = currentUser;
+        }
+    }
+
+    function renderLogs(username) {
+        const user = getUser(username);
+        const container = document.getElementById('logContainer');
+        if (!user || !user.transactions || user.transactions.length === 0) {
+            container.innerHTML = '<div class="log-entry" style="opacity:0.5;">—— 暂无记录 ——</div>';
+            return;
+        }
+        const logs = user.transactions.slice().reverse().slice(0, 15);
+        container.innerHTML = logs.map(function(entry) {
+            var sign = entry.type.includes('收入') || entry.type.includes('加钱') ? '+' : (entry.type.includes('支出') || entry.type.includes('扣款') ? '-' : '');
+            return '<div class="log-entry">[' + entry.time + '] ' + entry.type + ' ' + sign + entry.amount.toFixed(2) + ' ' + (entry.target ? '→ ' + entry.target : '') + '</div>';
+        }).join('');
+    }
+
+    function renderUserList() {
+        var container = document.getElementById('userListContainer');
+        var users = getAllUsers();
+        if (users.length === 0) {
+            container.innerHTML = '<div style="font-size:13px; color:#6a7f8f;">暂无用户</div>';
+            return;
+        }
+        container.innerHTML = users.map(function(u) {
+            return '<div class="user-list-item"><span class="user-name">👤 ' + u.name + '</span><span class="user-balance">💰 ' + u.balance.toFixed(2) + '</span></div>';
+        }).join('');
+    }
+
+    function refreshUI() {
+        renderBalance();
+        if (currentUser) renderLogs(currentUser);
+        if (document.getElementById('adminContent').style.display !== 'none') {
+            renderUserList();
+        }
+    }
+
+    function showAuthPage() {
+        document.getElementById('authPage').classList.remove('hidden');
+        document.getElementById('bankPage').classList.add('hidden');
+        var msg = document.getElementById('authMsg');
+        msg.textContent = '';
+        msg.className = 'msg-box';
+    }
+
+    function showBankPage() {
+        document.getElementById('authPage').classList.add('hidden');
+        document.getElementById('bankPage').classList.remove('hidden');
+        refreshUI();
+        document.getElementById('adminContent').style.display = 'none';
+        document.getElementById('adminFeedback').textContent = '';
+        document.getElementById('adminDeductResult').textContent = '';
+        document.getElementById('adminPasswordInput').value = '';
+        document.getElementById('transferMsg').textContent = '';
+        document.getElementById('transferMsg').className = 'msg-box';
+    }
+
+    function showAuthMsg(text, isError) {
+        var el = document.getElementById('authMsg');
+        el.textContent = text;
+        el.className = 'msg-box ' + (isError !== false ? 'msg-error' : 'msg-success');
+    }
+
+    function showTransferMsg(text, isError) {
+        var el = document.getElementById('transferMsg');
+        el.textContent = text;
+        el.className = 'msg-box ' + (isError !== false ? 'msg-error' : 'msg-success');
+    }
+
+    // ============================================================
+    //  事件绑定
+    // ============================================================
+    loadData();
+
+    // 注册
+    document.getElementById('authRegisterBtn').addEventListener('click', function(e) {
+        e.preventDefault();
+        var uname = document.getElementById('authUsername').value.trim();
+        var pwd = document.getElementById('authPassword').value.trim();
+
+        if (!uname || !pwd) {
+            showAuthMsg('⚠️ 账户名和密码不能为空');
+            return;
+        }
+        if (userExists(uname)) {
+            showAuthMsg('⚠️ 账户名 "' + uname + '" 已被占用');
+            return;
+        }
+
+        bankData.users[uname] = {
+            password: pwd,
+            balance: 100,
+            transactions: [{ type: '开户', amount: 100, target: '系统', time: new Date().toLocaleString() }]
+        };
+        saveData();
+
+        showAuthMsg('✅ 注册成功！账户: ' + uname + '，初始余额 100', false);
+
+        currentUser = uname;
+        setTimeout(function() {
+            showBankPage();
+        }, 400);
+    });
+
+    // 登录
+    document.getElementById('authLoginBtn').addEventListener('click', function(e) {
+        e.preventDefault();
+        var uname = document.getElementById('authUsername').value.trim();
+        var pwd = document.getElementById('authPassword').value.trim();
+
+        if (!uname || !pwd) {
+            showAuthMsg('⚠️ 请输入账户名和密码');
+            return;
+        }
+
+        var user = getUser(uname);
+        if (!user) {
+            showAuthMsg('⚠️ 用户 "' + uname + '" 不存在');
+            return;
+        }
+        if (user.password !== pwd) {
+            showAuthMsg('⚠️ 密码错误');
+            return;
+        }
+
+        showAuthMsg('✅ 登录成功！', false);
+        currentUser = uname;
+        setTimeout(function() {
+            showBankPage();
+        }, 300);
+    });
+
+    // 回车键支持
+    document.getElementById('authPassword').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') document.getElementById('authLoginBtn').click();
+    });
+    document.getElementById('authUsername').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') document.getElementById('authLoginBtn').click();
+    });
+
+    // 退出
+    document.getElementById('bankLogoutBtn').addEventListener('click', function() {
+        currentUser = null;
+        showAuthPage();
+        document.getElementById('authPassword').value = '';
+        document.getElementById('authUsername').value = '';
+        showAuthMsg('已退出', false);
+    });
+
+    // 转账
+    document.getElementById('transferBtn').addEventListener('click', function() {
+        var target = document.getElementById('transferTarget').value.trim();
+        var amount = parseFloat(document.getElementById('transferAmount').value);
+
+        if (!target) {
+            showTransferMsg('⚠️ 请输入目标账户名');
+            return;
+        }
+        if (isNaN(amount) || amount <= 0) {
+            showTransferMsg('⚠️ 请输入有效金额');
+            return;
+        }
+
+        var result = userTransfer(currentUser, target, amount);
+        showTransferMsg(result.msg, !result.success);
+
+        if (result.success) {
+            refreshUI();
+            document.getElementById('transferTarget').value = '';
+            document.getElementById('transferAmount').value = '';
+        }
+    });
+
+    // 刷新记录
+    document.getElementById('refreshLogBtn').addEventListener('click', function() {
+        if (currentUser) refreshUI();
+    });
+
+    // ============================================================
+    //  管理员功能
+    // ============================================================
+
+    // 管理员解锁
+    document.getElementById('adminUnlockBtn').addEventListener('click', function() {
+        var pwd = document.getElementById('adminPasswordInput').value.trim();
+        var feedback = document.getElementById('adminFeedback');
+        if (pwd === '911') {
+            document.getElementById('adminContent').style.display = 'block';
+            feedback.textContent = '✅ 管理员模式已激活 (无限资产)';
+            feedback.style.color = '#27ae60';
+            document.getElementById('adminPasswordInput').value = '';
+            renderUserList();
+        } else {
+            feedback.textContent = '❌ 密码错误';
+            feedback.style.color = '#c0392b';
+            document.getElementById('adminContent').style.display = 'none';
+        }
+    });
+
+    // 刷新用户列表
+    document.getElementById('adminRefreshUsersBtn').addEventListener('click', function() {
+        renderUserList();
+        document.getElementById('adminFeedback').textContent = '✅ 用户列表已刷新';
+        document.getElementById('adminFeedback').style.color = '#27ae60';
+    });
+
+    // 管理员查看用户记录
+    document.getElementById('adminViewLogBtn').addEventListener('click', function() {
+        var uname = document.getElementById('adminViewUser').value.trim();
+        var resultEl = document.getElementById('adminViewLogResult');
+        if (!uname) { resultEl.textContent = '⚠️ 请输入用户名'; return; }
+        var user = getUser(uname);
+        if (!user) { resultEl.textContent = '⚠️ 用户不存在'; return; }
+        if (!user.transactions || user.transactions.length === 0) {
+            resultEl.textContent = '📭 ' + uname + ' 无交易记录';
+            return;
+        }
+        var logs = user.transactions.slice().reverse().slice(0, 10);
+        var msg = '📋 ' + uname + ' 最近记录: ';
+        logs.forEach(function(e, idx) {
+            msg += e.time + ' ' + e.type + ' ' + e.amount.toFixed(2) + ' → ' + (e.target || '系统');
+            if (idx < logs.length-1) msg += ' ; ';
+        });
+        resultEl.textContent = msg;
+    });
+
+    // 管理员加钱
+    document.getElementById('adminTransferBtn').addEventListener('click', function() {
+        var target = document.getElementById('adminTransferTarget').value.trim();
+        var amount = parseFloat(document.getElementById('adminTransferAmount').value);
+        var feedback = document.getElementById('adminFeedback');
+        if (!target) { feedback.textContent = '⚠️ 请输入目标用户'; return; }
+        if (isNaN(amount) || amount <= 0) { feedback.textContent = '⚠️ 请输入有效金额'; return; }
+        var result = adminTransfer(target, amount);
+        feedback.textContent = result.msg;
+        feedback.style.color = result.success ? '#27ae60' : '#c0392b';
+        if (result.success) {
+            refreshUI();
+            renderUserList();
+            document.getElementById('adminTransferTarget').value = '';
+            document.getElementById('adminTransferAmount').value = '';
+        }
+    });
+
+    // 管理员扣减余额
+    document.getElementById('adminDeductBtn').addEventListener('click', function() {
+        var target = document.getElementById('adminDeductTarget').value.trim();
+        var amount = parseFloat(document.getElementById('adminDeductAmount').value);
+        var resultEl = document.getElementById('adminDeductResult');
+        if (!target) { resultEl.textContent = '⚠️ 请输入目标用户'; return; }
+        if (isNaN(amount) || amount <= 0) { resultEl.textContent = '⚠️ 请输入有效金额'; return; }
+        var result = adminDeduct(target, amount);
+        resultEl.textContent = result.msg;
+        resultEl.style.color = result.success ? '#27ae60' : '#c0392b';
+        if (result.success) {
+            refreshUI();
+            renderUserList();
+            document.getElementById('adminDeductTarget').value = '';
+            document.getElementById('adminDeductAmount').value = '';
+        }
+    });
+
+    // 删除用户
+    document.getElementById('adminDeleteUserBtn').addEventListener('click', function() {
+        var uname = document.getElementById('adminDeleteUser').value.trim();
+        var resultEl = document.getElementById('adminDeleteResult');
+        if (!uname) { resultEl.textContent = '⚠️ 请输入要删除的用户名'; return; }
+        if (!confirm('⚠️ 确定要删除用户 "' + uname + '" 吗？此操作不可恢复！')) {
+            resultEl.textContent = '已取消删除';
+            return;
+        }
+        var result = deleteUser(uname);
+        resultEl.textContent = result.msg;
+        resultEl.style.color = result.success ? '#27ae60' : '#c0392b';
+        if (result.success) {
+            refreshUI();
+            renderUserList();
+            document.getElementById('adminDeleteUser').value = '';
+        }
+    });
+
+    // 初始化
+    showAuthPage();
+    document.getElementById('authUsername').value = '';
+    document.getElementById('authPassword').value = '';
+</script>
+</body>
+</html>
