@@ -69,10 +69,15 @@
             font-size: 16px;
             outline: none;
             width: 100%;
+            transition: border-color 0.2s;
         }
         .input-group input:focus {
             border-color: #3f7b9e;
             box-shadow: 0 0 0 3px rgba(63, 123, 158, 0.2);
+        }
+        .input-group input:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
         }
         .btn {
             border: none;
@@ -85,11 +90,16 @@
             width: 100%;
             text-align: center;
         }
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
         .btn-primary {
             background: #1a3a4a;
             color: white;
         }
-        .btn-primary:active {
+        .btn-primary:active:not(:disabled) {
             transform: scale(0.96);
         }
         .btn-outline {
@@ -124,6 +134,7 @@
             border-radius: 16px;
             font-size: 14px;
             min-height: 20px;
+            transition: opacity 0.3s;
         }
         .msg-error {
             color: #c0392b;
@@ -255,11 +266,30 @@
             color: #1d3f57;
             font-weight: 600;
         }
-        .loading-text {
-            font-size: 13px;
-            color: #6a7f8f;
-            text-align: center;
-            padding: 10px;
+        .loading-dots::after {
+            content: '';
+            animation: dots 1.2s steps(4, end) infinite;
+        }
+        @keyframes dots {
+            0% { content: ''; }
+            25% { content: '.'; }
+            50% { content: '..'; }
+            75% { content: '...'; }
+            100% { content: ''; }
+        }
+        .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-top: 2px solid #fff;
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+            vertical-align: middle;
+            margin-right: 6px;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
         @media (max-width: 480px) {
             .auth-container { padding: 24px 18px 28px; }
@@ -275,7 +305,6 @@
 </head>
 <body>
 
-<!-- ===== 登录/注册界面 ===== -->
 <div id="authPage" class="auth-container">
     <div class="logo">
         <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -302,11 +331,11 @@
 
     <div class="input-group">
         <label>👤 账户名</label>
-        <input type="text" id="authUsername" placeholder="请输入用户名" value="">
+        <input type="text" id="authUsername" placeholder="请输入用户名">
     </div>
     <div class="input-group">
         <label>🔑 密码</label>
-        <input type="password" id="authPassword" placeholder="请输入密码" value="">
+        <input type="password" id="authPassword" placeholder="请输入密码">
     </div>
 
     <div class="flex-row">
@@ -315,13 +344,8 @@
     </div>
 
     <div id="authMsg" class="msg-box"></div>
-
-    <div style="margin-top:20px;padding:14px;background:#f0f4f8;border-radius:16px;font-size:13px;color:#3e5a6b;text-align:center;">
-        💡 还没有账户？点击 <strong>"注册"</strong> 创建新账户
-    </div>
 </div>
 
-<!-- ===== 银行主界面 ===== -->
 <div id="bankPage" class="bank-container hidden">
     <div class="flex-between">
         <div class="logo">
@@ -377,7 +401,6 @@
         </div>
     </div>
 
-    <!-- ===== 管理员面板 ===== -->
     <div class="admin-panel">
         <div style="display:flex; justify-content:space-between; align-items:center;">
             <span style="font-weight:600; color:#1a2e3f;">🔐 管理员</span>
@@ -391,11 +414,10 @@
         </div>
 
         <div id="adminContent" style="display:none; margin-top:10px;">
-
             <div class="admin-section">
                 <div class="admin-section-title">👥 所有用户及余额</div>
                 <div id="userListContainer">
-                    <div class="loading-text">加载中...</div>
+                    <div style="font-size:13px; color:#6a7f8f;">加载中...</div>
                 </div>
                 <button class="btn btn-sm" id="adminRefreshUsersBtn" style="margin-top:6px; width:auto;">🔄 刷新用户列表</button>
             </div>
@@ -453,7 +475,6 @@
                 </div>
                 <div id="adminDeleteResult" style="font-size:13px; margin-top:4px;"></div>
             </div>
-
         </div>
     </div>
 
@@ -468,16 +489,70 @@
     const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFsZHdlcWxmYnlqemJrenp3Z3lxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM5NDgyODIsImV4cCI6MjA5OTUyNDI4Mn0.f3ziLdorl8X5LciEbtZ93eB1SSfToLBSVxbe-9yRVDI';
 
     // ============================================================
-    //  数据层
+    //  状态
     // ============================================================
     let currentUser = null;
+    let isLoading = false;
 
-    // ---- 辅助函数：调用 Supabase API ----
-    async function supabaseRequest(method, table, body, query) {
+    // ============================================================
+    //  工具函数
+    // ============================================================
+    function setLoading(btnId, loading) {
+        const btn = document.getElementById(btnId);
+        if (!btn) return;
+        if (loading) {
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner"></span> 处理中...';
+        } else {
+            btn.disabled = false;
+            // 恢复按钮文本（需要根据按钮不同设置不同文本）
+            const textMap = {
+                'authLoginBtn': '🔓 登录',
+                'authRegisterBtn': '📝 注册',
+                'transferBtn': '💸 转账',
+                'adminTransferBtn': '➕ 加钱',
+                'adminDeductBtn': '➖ 扣减余额',
+                'adminDeleteUserBtn': '🗑️ 删除',
+                'adminViewLogBtn': '查看'
+            };
+            btn.textContent = textMap[btnId] || '按钮';
+        }
+    }
+
+    function showMsg(elId, text, isError = true) {
+        const el = document.getElementById(elId);
+        if (!el) return;
+        el.textContent = text;
+        el.className = 'msg-box ' + (isError ? 'msg-error' : 'msg-success');
+        // 3秒后自动淡出
+        clearTimeout(el._timer);
+        if (text && !isError) {
+            el._timer = setTimeout(() => {
+                el.style.opacity = '0';
+                setTimeout(() => {
+                    el.textContent = '';
+                    el.className = 'msg-box';
+                    el.style.opacity = '1';
+                }, 300);
+            }, 4000);
+        }
+    }
+
+    // ============================================================
+    //  Supabase 请求（带超时）
+    // ============================================================
+    async function supabaseRequest(method, table, body, query, timeout = 15000) {
         let url = SUPABASE_URL + '/rest/v1/' + table;
         if (query) {
-            url += '?' + new URLSearchParams(query).toString();
+            const params = new URLSearchParams();
+            for (let key in query) {
+                if (query[key] !== undefined && query[key] !== null) {
+                    params.append(key, query[key]);
+                }
+            }
+            url += '?' + params.toString();
         }
+
         const headers = {
             'apikey': SUPABASE_KEY,
             'Authorization': 'Bearer ' + SUPABASE_KEY,
@@ -490,20 +565,38 @@
         if (body) {
             options.body = JSON.stringify(body);
         }
-        const response = await fetch(url, options);
-        if (!response.ok) {
-            const errorText = await response.text();
-            throw new Error(errorText || '请求失败');
+
+        // 超时控制
+        const controller = new AbortController();
+        options.signal = controller.signal;
+        const timer = setTimeout(() => controller.abort(), timeout);
+
+        try {
+            const response = await fetch(url, options);
+            clearTimeout(timer);
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(errorText || '请求失败 (HTTP ' + response.status + ')');
+            }
+            if (method === 'DELETE') {
+                return { success: true };
+            }
+            return await response.json();
+        } catch(e) {
+            clearTimeout(timer);
+            if (e.name === 'AbortError') {
+                throw new Error('请求超时，请检查网络后重试');
+            }
+            throw e;
         }
-        if (method === 'DELETE') {
-            return { success: true };
-        }
-        return await response.json();
     }
 
-    // ---- 用户操作 ----
+    // ============================================================
+    //  数据操作
+    // ============================================================
     async function getUser(username) {
-        const results = await supabaseRequest('GET', 'users', null, { username: `eq.${username}` });
+        if (!username) return null;
+        const results = await supabaseRequest('GET', 'users', null, { username: 'eq.' + username });
         return results && results.length > 0 ? results[0] : null;
     }
 
@@ -513,42 +606,42 @@
     }
 
     async function createUser(username, password) {
-        const body = {
-            username: username,
-            password: password,
-            balance: 100
-        };
+        const body = { username, password, balance: 100 };
         await supabaseRequest('POST', 'users', body);
-        // 添加开户交易记录
-        await addTransaction(username, '开户', 100, '系统');
+        await supabaseRequest('POST', 'transactions', null, null, {
+            username: username,
+            type: '开户',
+            amount: 100,
+            target: '系统',
+            time: new Date().toLocaleString()
+        });
         return { success: true };
     }
 
+    async function getAllUsers() {
+        const results = await supabaseRequest('GET', 'users', null, { select: 'username,balance' });
+        return results.map(u => ({ name: u.username, balance: u.balance || 0 }));
+    }
+
+    async function getTransactions(username) {
+        const results = await supabaseRequest('GET', 'transactions', null, {
+            username: 'eq.' + username,
+            select: 'type,amount,target,time'
+        });
+        return results || [];
+    }
+
     async function addTransaction(username, type, amount, target) {
-        const body = {
+        await supabaseRequest('POST', 'transactions', null, null, {
             username: username,
             type: type,
             amount: typeof amount === 'number' ? amount : parseFloat(amount) || 0,
             target: target || '系统',
             time: new Date().toLocaleString()
-        };
-        await supabaseRequest('POST', 'transactions', body);
+        });
     }
 
-    async function getAllUsers() {
-        const results = await supabaseRequest('GET', 'users', null, { select: 'username,balance' });
-        return results.map(u => ({
-            name: u.username,
-            balance: u.balance || 0
-        }));
-    }
-
-    async function getTransactions(username) {
-        const results = await supabaseRequest('GET', 'transactions', null, { username: `eq.${username}`, select: 'type,amount,target,time' });
-        return results || [];
-    }
-
-    // ---- 普通转账 ----
+    // ---- 转账 ----
     async function userTransfer(from, to, amount) {
         amount = parseFloat(amount);
         if (isNaN(amount) || amount <= 0) return { success: false, msg: '⚠️ 金额必须大于0' };
@@ -558,14 +651,12 @@
         if (!fromUser) return { success: false, msg: '⚠️ 账户异常' };
         if (fromUser.balance < amount) return { success: false, msg: '⚠️ 余额不足' };
 
-        // 扣款
         const newFromBalance = Math.round((fromUser.balance - amount) * 100) / 100;
-        await supabaseRequest('PATCH', 'users', { balance: newFromBalance }, { username: `eq.${from}` });
+        await supabaseRequest('PATCH', 'users', { balance: newFromBalance }, { username: 'eq.' + from });
 
-        // 收款
         const toUser = await getUser(to);
         const newToBalance = Math.round((toUser.balance + amount) * 100) / 100;
-        await supabaseRequest('PATCH', 'users', { balance: newToBalance }, { username: `eq.${to}` });
+        await supabaseRequest('PATCH', 'users', { balance: newToBalance }, { username: 'eq.' + to });
 
         await addTransaction(from, '转账支出', amount, to);
         await addTransaction(to, '转账收入', amount, from);
@@ -580,7 +671,7 @@
         if (!(await userExists(toUsername))) return { success: false, msg: '⚠️ 目标用户不存在' };
         const targetUser = await getUser(toUsername);
         const newBalance = Math.round(((targetUser.balance || 0) + amount) * 100) / 100;
-        await supabaseRequest('PATCH', 'users', { balance: newBalance }, { username: `eq.${toUsername}` });
+        await supabaseRequest('PATCH', 'users', { balance: newBalance }, { username: 'eq.' + toUsername });
         await addTransaction(toUsername, '管理员加钱', amount, '管理员');
         return { success: true, msg: '✅ 成功给 ' + toUsername + ' 加钱 ' + amount.toFixed(2) };
     }
@@ -595,7 +686,7 @@
             return { success: false, msg: '⚠️ 用户 ' + fromUsername + ' 余额不足（当前 ' + targetUser.balance.toFixed(2) + '）' };
         }
         const newBalance = Math.round((targetUser.balance - amount) * 100) / 100;
-        await supabaseRequest('PATCH', 'users', { balance: newBalance }, { username: `eq.${fromUsername}` });
+        await supabaseRequest('PATCH', 'users', { balance: newBalance }, { username: 'eq.' + fromUsername });
         await addTransaction(fromUsername, '管理员扣款', amount, '管理员扣减');
         return { success: true, msg: '✅ 成功从 ' + fromUsername + ' 扣减 ' + amount.toFixed(2) + '，剩余 ' + newBalance.toFixed(2) };
     }
@@ -604,7 +695,7 @@
     async function deleteUser(username) {
         if (!(await userExists(username))) return { success: false, msg: '⚠️ 用户不存在' };
         if (username === currentUser) return { success: false, msg: '⚠️ 不能删除自己（当前登录用户）' };
-        await supabaseRequest('DELETE', 'users', null, { username: `eq.${username}` });
+        await supabaseRequest('DELETE', 'users', null, { username: 'eq.' + username });
         return { success: true, msg: '✅ 用户 ' + username + ' 已删除' };
     }
 
@@ -613,39 +704,50 @@
     // ============================================================
     async function renderBalance() {
         if (currentUser) {
-            const user = await getUser(currentUser);
-            if (user) {
-                document.getElementById('balanceDisplay').textContent = '💰 ' + user.balance.toFixed(2);
-                document.getElementById('currentUserDisplay').textContent = currentUser;
+            try {
+                const user = await getUser(currentUser);
+                if (user) {
+                    document.getElementById('balanceDisplay').textContent = '💰 ' + user.balance.toFixed(2);
+                    document.getElementById('currentUserDisplay').textContent = currentUser;
+                }
+            } catch(e) {
+                console.warn('获取余额失败', e);
             }
         }
     }
 
     async function renderLogs(username) {
         const container = document.getElementById('logContainer');
-        const transactions = await getTransactions(username);
-        if (!transactions || transactions.length === 0) {
-            container.innerHTML = '<div class="log-entry" style="opacity:0.5;">—— 暂无记录 ——</div>';
-            return;
+        try {
+            const transactions = await getTransactions(username);
+            if (!transactions || transactions.length === 0) {
+                container.innerHTML = '<div class="log-entry" style="opacity:0.5;">—— 暂无记录 ——</div>';
+                return;
+            }
+            const logs = transactions.slice().reverse().slice(0, 15);
+            container.innerHTML = logs.map(entry => {
+                const sign = entry.type.includes('收入') || entry.type.includes('加钱') ? '+' :
+                            (entry.type.includes('支出') || entry.type.includes('扣款') ? '-' : '');
+                return '<div class="log-entry">[' + entry.time + '] ' + entry.type + ' ' + sign +
+                       entry.amount.toFixed(2) + ' ' + (entry.target ? '→ ' + entry.target : '') + '</div>';
+            }).join('');
+        } catch(e) {
+            container.innerHTML = '<div class="log-entry" style="color:#c0392b;">⚠️ 加载记录失败</div>';
         }
-        const logs = transactions.slice().reverse().slice(0, 15);
-        container.innerHTML = logs.map(function(entry) {
-            var sign = entry.type.includes('收入') || entry.type.includes('加钱') ? '+' : (entry.type.includes('支出') || entry.type.includes('扣款') ? '-' : '');
-            return '<div class="log-entry">[' + entry.time + '] ' + entry.type + ' ' + sign + entry.amount.toFixed(2) + ' ' + (entry.target ? '→ ' + entry.target : '') + '</div>';
-        }).join('');
     }
 
     async function renderUserList() {
-        var container = document.getElementById('userListContainer');
+        const container = document.getElementById('userListContainer');
         try {
-            var users = await getAllUsers();
+            const users = await getAllUsers();
             if (users.length === 0) {
                 container.innerHTML = '<div style="font-size:13px; color:#6a7f8f;">暂无用户</div>';
                 return;
             }
-            container.innerHTML = users.map(function(u) {
-                return '<div class="user-list-item"><span class="user-name">👤 ' + u.name + '</span><span class="user-balance">💰 ' + u.balance.toFixed(2) + '</span></div>';
-            }).join('');
+            container.innerHTML = users.map(u =>
+                '<div class="user-list-item"><span class="user-name">👤 ' + u.name +
+                '</span><span class="user-balance">💰 ' + u.balance.toFixed(2) + '</span></div>'
+            ).join('');
         } catch(e) {
             container.innerHTML = '<div style="font-size:13px; color:#c0392b;">加载失败，请刷新重试</div>';
         }
@@ -661,12 +763,14 @@
         }
     }
 
+    // ============================================================
+    //  页面切换
+    // ============================================================
     function showAuthPage() {
         document.getElementById('authPage').classList.remove('hidden');
         document.getElementById('bankPage').classList.add('hidden');
-        var msg = document.getElementById('authMsg');
-        msg.textContent = '';
-        msg.className = 'msg-box';
+        document.getElementById('authMsg').textContent = '';
+        document.getElementById('authMsg').className = 'msg-box';
     }
 
     function showBankPage() {
@@ -681,18 +785,6 @@
         document.getElementById('transferMsg').className = 'msg-box';
     }
 
-    function showAuthMsg(text, isError) {
-        var el = document.getElementById('authMsg');
-        el.textContent = text;
-        el.className = 'msg-box ' + (isError !== false ? 'msg-error' : 'msg-success');
-    }
-
-    function showTransferMsg(text, isError) {
-        var el = document.getElementById('transferMsg');
-        el.textContent = text;
-        el.className = 'msg-box ' + (isError !== false ? 'msg-error' : 'msg-success');
-    }
-
     // ============================================================
     //  事件绑定
     // ============================================================
@@ -700,59 +792,70 @@
     // ---- 注册 ----
     document.getElementById('authRegisterBtn').addEventListener('click', async function(e) {
         e.preventDefault();
-        var uname = document.getElementById('authUsername').value.trim();
-        var pwd = document.getElementById('authPassword').value.trim();
+        if (isLoading) return;
+        isLoading = true;
+        setLoading('authRegisterBtn', true);
 
-        if (!uname || !pwd) {
-            showAuthMsg('⚠️ 账户名和密码不能为空');
-            return;
-        }
-        if (await userExists(uname)) {
-            showAuthMsg('⚠️ 账户名 "' + uname + '" 已被占用');
-            return;
-        }
+        const uname = document.getElementById('authUsername').value.trim();
+        const pwd = document.getElementById('authPassword').value.trim();
 
         try {
+            if (!uname || !pwd) {
+                showMsg('authMsg', '⚠️ 账户名和密码不能为空');
+                return;
+            }
+            if (await userExists(uname)) {
+                showMsg('authMsg', '⚠️ 账户名 "' + uname + '" 已被占用');
+                return;
+            }
+
             await createUser(uname, pwd);
-            showAuthMsg('✅ 注册成功！账户: ' + uname + '，初始余额 100', false);
+            showMsg('authMsg', '✅ 注册成功！账户: ' + uname + '，初始余额 100', false);
+
             currentUser = uname;
-            setTimeout(function() {
-                showBankPage();
-            }, 400);
+            showBankPage();
         } catch(e) {
-            showAuthMsg('⚠️ 注册失败，请重试');
+            showMsg('authMsg', '⚠️ 注册失败: ' + e.message);
+        } finally {
+            isLoading = false;
+            setLoading('authRegisterBtn', false);
         }
     });
 
     // ---- 登录 ----
     document.getElementById('authLoginBtn').addEventListener('click', async function(e) {
         e.preventDefault();
-        var uname = document.getElementById('authUsername').value.trim();
-        var pwd = document.getElementById('authPassword').value.trim();
+        if (isLoading) return;
+        isLoading = true;
+        setLoading('authLoginBtn', true);
 
-        if (!uname || !pwd) {
-            showAuthMsg('⚠️ 请输入账户名和密码');
-            return;
-        }
+        const uname = document.getElementById('authUsername').value.trim();
+        const pwd = document.getElementById('authPassword').value.trim();
 
         try {
-            var user = await getUser(uname);
+            if (!uname || !pwd) {
+                showMsg('authMsg', '⚠️ 请输入账户名和密码');
+                return;
+            }
+
+            const user = await getUser(uname);
             if (!user) {
-                showAuthMsg('⚠️ 用户 "' + uname + '" 不存在');
+                showMsg('authMsg', '⚠️ 用户 "' + uname + '" 不存在');
                 return;
             }
             if (user.password !== pwd) {
-                showAuthMsg('⚠️ 密码错误');
+                showMsg('authMsg', '⚠️ 密码错误');
                 return;
             }
 
-            showAuthMsg('✅ 登录成功！', false);
+            showMsg('authMsg', '✅ 登录成功！', false);
             currentUser = uname;
-            setTimeout(function() {
-                showBankPage();
-            }, 300);
+            showBankPage();
         } catch(e) {
-            showAuthMsg('⚠️ 登录失败，请重试');
+            showMsg('authMsg', '⚠️ 登录失败: ' + e.message);
+        } finally {
+            isLoading = false;
+            setLoading('authLoginBtn', false);
         }
     });
 
@@ -770,39 +873,51 @@
         showAuthPage();
         document.getElementById('authPassword').value = '';
         document.getElementById('authUsername').value = '';
-        showAuthMsg('已退出', false);
+        showMsg('authMsg', '已退出', false);
     });
 
     // ---- 转账 ----
     document.getElementById('transferBtn').addEventListener('click', async function() {
-        var target = document.getElementById('transferTarget').value.trim();
-        var amount = parseFloat(document.getElementById('transferAmount').value);
+        if (isLoading) return;
+        isLoading = true;
+        setLoading('transferBtn', true);
 
-        if (!target) {
-            showTransferMsg('⚠️ 请输入目标账户名');
-            return;
-        }
-        if (isNaN(amount) || amount <= 0) {
-            showTransferMsg('⚠️ 请输入有效金额');
-            return;
-        }
+        const target = document.getElementById('transferTarget').value.trim();
+        const amount = parseFloat(document.getElementById('transferAmount').value);
 
         try {
-            var result = await userTransfer(currentUser, target, amount);
-            showTransferMsg(result.msg, !result.success);
+            if (!target) {
+                showMsg('transferMsg', '⚠️ 请输入目标账户名');
+                return;
+            }
+            if (isNaN(amount) || amount <= 0) {
+                showMsg('transferMsg', '⚠️ 请输入有效金额');
+                return;
+            }
+
+            const result = await userTransfer(currentUser, target, amount);
+            showMsg('transferMsg', result.msg, !result.success);
             if (result.success) {
                 await refreshUI();
                 document.getElementById('transferTarget').value = '';
                 document.getElementById('transferAmount').value = '';
             }
         } catch(e) {
-            showTransferMsg('⚠️ 转账失败，请重试');
+            showMsg('transferMsg', '⚠️ 转账失败: ' + e.message);
+        } finally {
+            isLoading = false;
+            setLoading('transferBtn', false);
         }
     });
 
     // ---- 刷新 ----
     document.getElementById('refreshLogBtn').addEventListener('click', async function() {
         if (currentUser) await refreshUI();
+        showMsg('transferMsg', '✅ 已刷新', false);
+        setTimeout(() => {
+            document.getElementById('transferMsg').textContent = '';
+            document.getElementById('transferMsg').className = 'msg-box';
+        }, 1500);
     });
 
     // ============================================================
@@ -810,11 +925,11 @@
     // ============================================================
 
     document.getElementById('adminUnlockBtn').addEventListener('click', function() {
-        var pwd = document.getElementById('adminPasswordInput').value.trim();
-        var feedback = document.getElementById('adminFeedback');
+        const pwd = document.getElementById('adminPasswordInput').value.trim();
+        const feedback = document.getElementById('adminFeedback');
         if (pwd === '911') {
             document.getElementById('adminContent').style.display = 'block';
-            feedback.textContent = '✅ 管理员模式已激活 (无限资产)';
+            feedback.textContent = '✅ 管理员模式已激活';
             feedback.style.color = '#27ae60';
             document.getElementById('adminPasswordInput').value = '';
             renderUserList();
@@ -832,37 +947,42 @@
     });
 
     document.getElementById('adminViewLogBtn').addEventListener('click', async function() {
-        var uname = document.getElementById('adminViewUser').value.trim();
-        var resultEl = document.getElementById('adminViewLogResult');
+        const uname = document.getElementById('adminViewUser').value.trim();
+        const resultEl = document.getElementById('adminViewLogResult');
         if (!uname) { resultEl.textContent = '⚠️ 请输入用户名'; return; }
         try {
-            var user = await getUser(uname);
+            const user = await getUser(uname);
             if (!user) { resultEl.textContent = '⚠️ 用户不存在'; return; }
-            var transactions = await getTransactions(uname);
+            const transactions = await getTransactions(uname);
             if (!transactions || transactions.length === 0) {
                 resultEl.textContent = '📭 ' + uname + ' 无交易记录';
                 return;
             }
-            var logs = transactions.slice().reverse().slice(0, 10);
-            var msg = '📋 ' + uname + ' 最近记录: ';
-            logs.forEach(function(e, idx) {
+            const logs = transactions.slice().reverse().slice(0, 10);
+            let msg = '📋 ' + uname + ' 最近记录: ';
+            logs.forEach((e, idx) => {
                 msg += e.time + ' ' + e.type + ' ' + e.amount.toFixed(2) + ' → ' + (e.target || '系统');
-                if (idx < logs.length-1) msg += ' ; ';
+                if (idx < logs.length - 1) msg += ' ; ';
             });
             resultEl.textContent = msg;
         } catch(e) {
-            resultEl.textContent = '⚠️ 查询失败';
+            resultEl.textContent = '⚠️ 查询失败: ' + e.message;
         }
     });
 
     document.getElementById('adminTransferBtn').addEventListener('click', async function() {
-        var target = document.getElementById('adminTransferTarget').value.trim();
-        var amount = parseFloat(document.getElementById('adminTransferAmount').value);
-        var feedback = document.getElementById('adminFeedback');
-        if (!target) { feedback.textContent = '⚠️ 请输入目标用户'; return; }
-        if (isNaN(amount) || amount <= 0) { feedback.textContent = '⚠️ 请输入有效金额'; return; }
+        if (isLoading) return;
+        isLoading = true;
+        setLoading('adminTransferBtn', true);
+
+        const target = document.getElementById('adminTransferTarget').value.trim();
+        const amount = parseFloat(document.getElementById('adminTransferAmount').value);
+        const feedback = document.getElementById('adminFeedback');
+
         try {
-            var result = await adminTransfer(target, amount);
+            if (!target) { feedback.textContent = '⚠️ 请输入目标用户'; return; }
+            if (isNaN(amount) || amount <= 0) { feedback.textContent = '⚠️ 请输入有效金额'; return; }
+            const result = await adminTransfer(target, amount);
             feedback.textContent = result.msg;
             feedback.style.color = result.success ? '#27ae60' : '#c0392b';
             if (result.success) {
@@ -872,19 +992,27 @@
                 document.getElementById('adminTransferAmount').value = '';
             }
         } catch(e) {
-            feedback.textContent = '⚠️ 操作失败，请重试';
+            feedback.textContent = '⚠️ 操作失败: ' + e.message;
             feedback.style.color = '#c0392b';
+        } finally {
+            isLoading = false;
+            setLoading('adminTransferBtn', false);
         }
     });
 
     document.getElementById('adminDeductBtn').addEventListener('click', async function() {
-        var target = document.getElementById('adminDeductTarget').value.trim();
-        var amount = parseFloat(document.getElementById('adminDeductAmount').value);
-        var resultEl = document.getElementById('adminDeductResult');
-        if (!target) { resultEl.textContent = '⚠️ 请输入目标用户'; return; }
-        if (isNaN(amount) || amount <= 0) { resultEl.textContent = '⚠️ 请输入有效金额'; return; }
+        if (isLoading) return;
+        isLoading = true;
+        setLoading('adminDeductBtn', true);
+
+        const target = document.getElementById('adminDeductTarget').value.trim();
+        const amount = parseFloat(document.getElementById('adminDeductAmount').value);
+        const resultEl = document.getElementById('adminDeductResult');
+
         try {
-            var result = await adminDeduct(target, amount);
+            if (!target) { resultEl.textContent = '⚠️ 请输入目标用户'; return; }
+            if (isNaN(amount) || amount <= 0) { resultEl.textContent = '⚠️ 请输入有效金额'; return; }
+            const result = await adminDeduct(target, amount);
             resultEl.textContent = result.msg;
             resultEl.style.color = result.success ? '#27ae60' : '#c0392b';
             if (result.success) {
@@ -894,21 +1022,29 @@
                 document.getElementById('adminDeductAmount').value = '';
             }
         } catch(e) {
-            resultEl.textContent = '⚠️ 操作失败，请重试';
+            resultEl.textContent = '⚠️ 操作失败: ' + e.message;
             resultEl.style.color = '#c0392b';
+        } finally {
+            isLoading = false;
+            setLoading('adminDeductBtn', false);
         }
     });
 
     document.getElementById('adminDeleteUserBtn').addEventListener('click', async function() {
-        var uname = document.getElementById('adminDeleteUser').value.trim();
-        var resultEl = document.getElementById('adminDeleteResult');
+        if (isLoading) return;
+        const uname = document.getElementById('adminDeleteUser').value.trim();
+        const resultEl = document.getElementById('adminDeleteResult');
         if (!uname) { resultEl.textContent = '⚠️ 请输入要删除的用户名'; return; }
         if (!confirm('⚠️ 确定要删除用户 "' + uname + '" 吗？此操作不可恢复！')) {
             resultEl.textContent = '已取消删除';
             return;
         }
+
+        isLoading = true;
+        setLoading('adminDeleteUserBtn', true);
+
         try {
-            var result = await deleteUser(uname);
+            const result = await deleteUser(uname);
             resultEl.textContent = result.msg;
             resultEl.style.color = result.success ? '#27ae60' : '#c0392b';
             if (result.success) {
@@ -917,8 +1053,11 @@
                 document.getElementById('adminDeleteUser').value = '';
             }
         } catch(e) {
-            resultEl.textContent = '⚠️ 删除失败，请重试';
+            resultEl.textContent = '⚠️ 删除失败: ' + e.message;
             resultEl.style.color = '#c0392b';
+        } finally {
+            isLoading = false;
+            setLoading('adminDeleteUserBtn', false);
         }
     });
 
